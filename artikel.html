@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor Artikel - MainTrick CMS</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <meta name="theme-color" content="#667eea">
+    
+    <!-- Quill.js CSS untuk WYSIWYG Editor -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #ff5252;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .btn-success {
+            background: #4caf50;
+            color: white;
+            font-size: 1rem;
+            padding: 0.75rem 1.5rem;
+        }
+        
+        .btn-success:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 20px;
+        }
+        
+        /* Main Editor Area */
+        .editor-main {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        
+        .editor-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .title-input {
+            width: 100%;
+            border: none;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+            padding: 10px 0;
+            outline: none;
+            background: transparent;
+        }
+        
+        .title-input::placeholder {
+            color: #999;
+        }
+        
+        .permalink {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .permalink-text {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .permalink-edit {
+            color: #999;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        
+        /* Editor Content */
+        .editor-content {
+            padding: 20px;
+        }
+        
+        #editor {
+            min-height: 500px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+        }
+        
+        .ql-editor {
+            font-size: 16px;
+            line-height: 1.7;
+            padding: 20px;
+        }
+        
+        .ql-editor h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 1.5rem 0 1rem 0;
+            color: #333;
+        }
+        
+        .ql-editor h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 1.5rem 0 1rem 0;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+        
+        .ql-editor h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 1.2rem 0 0.8rem 0;
+            color: #333;
+        }
+        
+        .ql-editor h4, .ql-editor h5, .ql-editor h6 {
+            font-weight: 600;
+            margin: 1rem 0 0.5rem 0;
+            color: #333;
+        }
+        
+        .ql-editor p {
+            margin-bottom: 1rem;
+        }
+        
+        .ql-editor blockquote {
+            border-left: 4px solid #667eea;
+            padding-left: 1rem;
+            margin: 1rem 0;
+            font-style: italic;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .ql-editor img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 1rem 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .ql-editor code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        
+        .ql-editor pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+        
+        .ql-toolbar {
+            border-top: 1px solid #ddd;
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .ql-container {
+            border-bottom: 1px solid #ddd;
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .sidebar-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        
+        .section-header {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eee;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .section-content {
+            padding: 20px;
+        }
+        
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        /* Tags Input */
+        .tags-container {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 5px;
+            min-height: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            align-items: flex-start;
+        }
+        
+        .tag {
+            background: #667eea;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .tag-remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .tag-input {
+            border: none;
+            outline: none;
+            flex: 1;
+            min-width: 100px;
+            padding: 5px;
+        }
+        
+        /* Image Upload */
+        .image-upload {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .image-upload:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+        
+        .image-upload.dragover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .upload-icon {
+            font-size: 2rem;
+            color: #999;
+            margin-bottom: 10px;
+        }
+        
+        .upload-text {
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .upload-subtext {
+            color: #999;
+            font-size: 0.9rem;
+        }
+        
+        .image-preview {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        /* Character Count */
+        .char-count {
+            font-size: 0.8rem;
+            color: #999;
+            text-align: right;
+            margin-top: 5px;
+        }
+        
+        /* Reading Time */
+        .reading-time {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .loading-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Success Message */
+        .success-message {
+            display: none;
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .sidebar {
+                order: -1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .title-input {
+                font-size: 1.5rem;
+            }
+            
+            .section-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p>Sedang memproses artikel...</p>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message" id="successMessage">
+        ✅ Artikel berhasil dipublish!
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="https://wahyustw.github.io/maintrick.github.io/" class="logo">📝 MainTrick CMS</a>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="saveDraft()">💾 Simpan Draft</button>
+                <button class="btn btn-secondary" onclick="previewArticle()">👁️ Preview</button>
+                <button class="btn btn-success" onclick="publishArticle()">🚀 Publish</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Main Editor -->
+        <div class="editor-main">
+            <div class="editor-header">
+                <input type="text" class="title-input" id="articleTitle" placeholder="Masukkan judul artikel..." onkeyup="updatePermalink()">
+                <div class="permalink">
+                    <strong>Permalink:</strong> 
+                    <span>https://wahyustw.github.io/maintrick.github.io/artikel/</span><a href="#" class="permalink-text" id="permalink">judul-artikel</a><span class="permalink-edit" onclick="editPermalink()">Edit</span>
+                </div>
+            </div>
+            
+            <div class="editor-content">
+                <!-- Toolbar Guide -->
+                <div style="background: #e8f4fd; border: 1px solid #b3d9ff; border-radius: 8px; padding: 15px; margin-bottom: 15px; font-size: 0.9rem; color: #0066cc;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <span style="font-size: 1.2rem;">💡</span>
+                        <strong>Panduan Toolbar Editor:</strong>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; font-size: 0.85rem;">
+                        <span>📝 <strong>H1-H6</strong>: Heading/Judul</span>
+                        <span>🖼️ <strong>Image</strong>: Insert gambar</span>
+                        <span>📐 <strong>Align</strong>: Left, Center, Right, Justify</span>
+                        <span>🎨 <strong>Color</strong>: Warna teks & background</span>
+                        <span>💬 <strong>Quote</strong>: Blockquote</span>
+                        <span>📋 <strong>List</strong>: Bullet & numbered list</span>
+                        <span>🔗 <strong>Link</strong>: Insert hyperlink</span>
+                        <span>📹 <strong>Video</strong>: Embed video</span>
+                    </div>
+                </div>
+                
+                <div id="editor"></div>
+                
+                <!-- Writing Stats & Tips -->
+                <div style="background: #f8f9fa; border-radius: 8px; padding: 15px; margin-top: 15px; font-size: 0.9rem; color: #666;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
+                        <strong style="color: #333;">✍️ Statistik & Tips Menulis:</strong>
+                        <div id="wordStats" style="font-size: 0.85rem; color: #667eea; font-weight: 500;">
+                            <span id="wordCount">0 kata</span> | 
+                            <span id="charCount">0 karakter</span> | 
+                            <span id="readingTimeEditor">0 menit baca</span>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 5px; font-size: 0.85rem; line-height: 1.4;">
+                        <span>• H1 untuk judul utama, H2 untuk sub-judul</span>
+                        <span>• Insert gambar dengan tombol 🖼️</span>
+                        <span>• Gunakan blockquote untuk highlight</span>
+                        <span>• Align text: kiri, tengah, kanan, justify</span>
+                        <span>• Tambahkan list untuk poin penting</span>
+                        <span>• Link untuk referensi eksternal</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Publish Settings -->
+            <div class="sidebar-section">
+                <div class="section-header">⚙️ Pengaturan Publish</div>
+                <div class="section-content">
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select class="form-select" id="articleStatus">
+                            <option value="draft">Draft</option>
+                            <option value="published">Published</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Tanggal Publish</label>
+                        <input type="datetime-local" class="form-input" id="publishDate">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Penulis</label>
+                        <input type="text" class="form-input" id="articleAuthor" value="MainTrick Team">
+                    </div>
+                    
+                    <div class="reading-time" id="readingTime">⏱️ Estimasi baca: 0 menit</div>
+                </div>
+            </div>
+
+            <!-- Categories & Tags -->
+            <div class="sidebar-section">
+                <div class="section-header">🏷️ Kategori & Tag</div>
+                <div class="section-content">
+                    <div class="form-group">
+                        <label class="form-label">Kategori</label>
+                        <select class="form-select" id="articleCategory">
+                            <option value="artikel">Artikel</option>
+                            <option value="tutorial">Tutorial</option>
+                            <option value="game-aplikasi">Game & Aplikasi</option>
+                            <option value="berita">Berita</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Tags</label>
+                        <div class="tags-container" id="tagsContainer">
+                            <input type="text" class="tag-input" id="tagInput" placeholder="Tambah tag..." onkeypress="addTag(event)">
+                        </div>
+                        <div class="char-count">Pisahkan dengan Enter</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEO Settings -->
+            <div class="sidebar-section">
+                <div class="section-header">🎯 SEO Settings</div>
+                <div class="section-content">
+                    <div class="form-group">
+                        <label class="form-label">Meta Description</label>
+                        <textarea class="form-textarea" id="metaDescription" placeholder="Deskripsi singkat artikel untuk SEO (max 160 karakter)" maxlength="160" onkeyup="updateCharCount('metaDescription', 'metaDescCount', 160)"></textarea>
+                        <div class="char-count" id="metaDescCount">0/160 karakter</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Excerpt</label>
+                        <textarea class="form-textarea" id="articleExcerpt" placeholder="Ringkasan artikel yang menarik" onkeyup="updateCharCount('articleExcerpt', 'excerptCount', 300)"></textarea>
+                        <div class="char-count" id="excerptCount">0/300 karakter</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Keywords SEO</label>
+                        <input type="text" class="form-input" id="seoKeywords" placeholder="keyword1, keyword2, keyword3">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Image -->
+            <div class="sidebar-section">
+                <div class="section-header">🖼️ Gambar Utama</div>
+                <div class="section-content">
+                    <div class="image-upload" id="imageUpload" onclick="document.getElementById('imageInput').click()">
+                        <div class="upload-icon">📷</div>
+                        <div class="upload-text">Klik untuk upload gambar</div>
+                        <div class="upload-subtext">atau drag & drop file di sini</div>
+                        <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                    </div>
+                    <img id="imagePreview" class="image-preview" style="display: none;">
+                    
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label class="form-label">Alt Text Gambar</label>
+                        <input type="text" class="form-input" id="imageAlt" placeholder="Deskripsi gambar untuk accessibility">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quill.js JavaScript -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+    <script>
+        // Initialize Quill Editor dengan toolbar lengkap
+        var quill = new Quill('#editor', {
+            theme: 'snow',
+            placeholder: 'Mulai menulis artikel Anda di sini...',
+            modules: {
+                toolbar: {
+                    container: [
+                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                        [{ 'font': [] }],
+                        [{ 'size': ['small', false, 'large', 'huge'] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'script': 'sub'}, { 'script': 'super' }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+                        [{ 'indent': '-1'}, { 'indent': '+1' }],
+                        [{ 'direction': 'rtl' }],
+                        [{ 'align': [] }],
+                        ['blockquote', 'code-block'],
+                        ['link', 'image', 'video', 'formula'],
+                        ['clean']
+                    ],
+                    handlers: {
+                        'image': imageHandler
+                    }
+                }
+            }
+        });
+
+        // Custom image handler untuk insert gambar yang lebih baik
+        function imageHandler() {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+            input.click();
+
+            input.onchange = () => {
+                const file = input.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const range = quill.getSelection();
+                        quill.insertEmbed(range.index, 'image', e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+        }
+
+        // Global variables
+        let articleData = {
+            title: '',
+            permalink: '',
+            content: '',
+            category: 'artikel',
+            tags: [],
+            metaDescription: '',
+            excerpt: '',
+            keywords: '',
+            author: 'MainTrick Team',
+            status: 'draft',
+            publishDate: '',
+            featuredImage: '',
+            imageAlt: ''
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default publish date to now
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.getElementById('publishDate').value = now.toISOString().slice(0, 16);
+            
+            // Update reading time when content changes
+            quill.on('text-change', function() {
+                updateReadingTime();
+            });
+            
+            // Setup drag and drop for images
+            setupImageDragDrop();
+        });
+
+        // Update permalink based on title
+        function updatePermalink() {
+            const title = document.getElementById('articleTitle').value;
+            const permalink = title.toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .trim('-');
+            
+            document.getElementById('permalink').textContent = permalink || 'judul-artikel';
+            articleData.title = title;
+            articleData.permalink = permalink;
+        }
+
+        // Edit permalink
+        function editPermalink() {
+            const currentPermalink = document.getElementById('permalink').textContent;
+            const newPermalink = prompt('Edit permalink:', currentPermalink);
+            if (newPermalink) {
+                const cleanPermalink = newPermalink.toLowerCase()
+                    .replace(/[^a-z0-9-]/g, '')
+                    .replace(/-+/g, '-')
+                    .trim('-');
+                document.getElementById('permalink').textContent = cleanPermalink;
+                articleData.permalink = cleanPermalink;
+            }
+        }
+
+        // Add tag
+        function addTag(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const tagInput = event.target;
+                const tagValue = tagInput.value.trim();
+                
+                if (tagValue && !articleData.tags.includes(tagValue)) {
+                    articleData.tags.push(tagValue);
+                    renderTags();
+                    tagInput.value = '';
+                }
+            }
+        }
+
+        // Render tags
+        function renderTags() {
+            const container = document.getElementById('tagsContainer');
+            const tagInput = document.getElementById('tagInput');
+            
+            // Clear existing tags
+            container.innerHTML = '';
+            
+            // Add tags
+            articleData.tags.forEach((tag, index) => {
+                const tagElement = document.createElement('span');
+                tagElement.className = 'tag';
+                tagElement.innerHTML = `${tag} <span class="tag-remove" onclick="removeTag(${index})">×</span>`;
+                container.appendChild(tagElement);
+            });
+            
+            // Re-add input
+            container.appendChild(tagInput);
+        }
+
+        // Remove tag
+        function removeTag(index) {
+            articleData.tags.splice(index, 1);
+            renderTags();
+        }
+
+        // Update character count
+        function updateCharCount(inputId, countId, maxLength) {
+            const input = document.getElementById(inputId);
+            const count = document.getElementById(countId);
+            const length = input.value.length;
+            count.textContent = `${length}/${maxLength} karakter`;
+            
+            if (length > maxLength * 0.9) {
+                count.style.color = length >= maxLength ? '#d63031' : '#f39c12';
+            } else {
+                count.style.color = '#999';
+            }
+        }
+
+        // Update reading time and word count
+        function updateReadingTime() {
+            const content = quill.getText();
+            const words = content.trim().split(/\s+/).filter(word => word.length > 0).length;
+            const chars = content.length;
+            const readingTime = Math.ceil(words / 200); // Assuming 200 words per minute
+            
+            // Update main reading time
+            document.getElementById('readingTime').textContent = `⏱️ Estimasi baca: ${readingTime} menit`;
+            
+            // Update editor stats
+            document.getElementById('wordCount').textContent = `${words} kata`;
+            document.getElementById('charCount').textContent = `${chars} karakter`;
+            document.getElementById('readingTimeEditor').textContent = `${readingTime} menit baca`;
+        }
+
+        // Handle image upload
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    articleData.featuredImage = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Setup image drag and drop
+        function setupImageDragDrop() {
+            const uploadArea = document.getElementById('imageUpload');
+            
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0 && files[0].type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = document.getElementById('imagePreview');
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                        articleData.featuredImage = e.target.result;
+                    };
+                    reader.readAsDataURL(files[0]);
+                }
+            });
+        }
+
+        // Collect all form data
+        function collectArticleData() {
+            articleData.title = document.getElementById('articleTitle').value;
+            articleData.content = quill.root.innerHTML;
+            articleData.category = document.getElementById('articleCategory').value;
+            articleData.metaDescription = document.getElementById('metaDescription').value;
+            articleData.excerpt = document.getElementById('articleExcerpt').value;
+            articleData.keywords = document.getElementById('seoKeywords').value;
+            articleData.author = document.getElementById('articleAuthor').value;
+            articleData.status = document.getElementById('articleStatus').value;
+            articleData.publishDate = document.getElementById('publishDate').value;
+            articleData.imageAlt = document.getElementById('imageAlt').value;
+            
+            return articleData;
+        }
+
+        // Generate HTML article
+        function generateArticleHTML(data) {
+            const publishDate = new Date(data.publishDate);
+            const formattedDate = publishDate.toLocaleDateString('id-ID', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            const isoDate = publishDate.toISOString().split('T')[0];
+            
+            return `<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${data.title} - MainTrick</title>
+    <meta name="description" content="${data.metaDescription}">
+    <meta name="keywords" content="${data.keywords}">
+    <meta name="author" content="${data.author}">
+    <meta name="robots" content="index, follow">
+    <meta name="article:published_time" content="${isoDate}">
+    <meta name="article:modified_time" content="${isoDate}">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="${data.title} - MainTrick">
+    <meta property="og:description" content="${data.metaDescription}">
+    <meta property="og:image" content="https://wahyustw.github.io/maintrick.github.io/assets/images/${data.permalink}.jpg">
+    <meta property="og:url" content="https://wahyustw.github.io/maintrick.github.io/${data.category}/${data.permalink}.html">
+    <meta property="og:type" content="article">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <link rel="canonical" href="https://wahyustw.github.io/maintrick.github.io/${data.category}/${data.permalink}.html">
+    <meta name="theme-color" content="#667eea">
+    
+    <style>
+        /* CSS lengkap dari template artikel */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.7; color: #333; background-color: #f8f9fa; }
+        
+        /* Header */
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1rem 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .logo { font-size: 2rem; font-weight: bold; text-decoration: none; color: white; }
+        nav ul { display: flex; list-style: none; gap: 2rem; }
+        nav a { color: white; text-decoration: none; font-weight: 500; }
+        
+        /* Article */
+        .article-container { max-width: 800px; margin: 2rem auto; background: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
+        .breadcrumb { padding: 1rem 2rem; background: #f8f9fa; font-size: 0.9rem; color: #666; }
+        .article-header { padding: 2rem; border-bottom: 1px solid #eee; }
+        .article-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; }
+        .article-meta { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; font-size: 0.9rem; color: #666; }
+        .article-content { padding: 2rem; line-height: 1.8; }
+        .article-content h2 { font-size: 1.8rem; margin: 2rem 0 1rem; border-bottom: 2px solid #667eea; padding-bottom: 0.5rem; }
+        .article-content p { margin-bottom: 1rem; }
+        .article-content img { max-width: 100%; border-radius: 8px; margin: 1rem 0; }
+        
+        /* Footer */
+        footer { background: #333; color: white; padding: 3rem 0 1rem; margin-top: 4rem; }
+        .footer-content { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3rem; margin-bottom: 2rem; }
+        .footer-section h4 { margin-bottom: 1rem; }
+        .footer-section ul { list-style: none; }
+        .footer-section a { color: #ccc; text-decoration: none; }
+        .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid #555; color: #ccc; }
+        
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; gap: 1rem; }
+            .article-container { margin: 1rem; }
+            .article-title { font-size: 2rem; }
+            .footer-content { grid-template-columns: 1fr; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="https://wahyustw.github.io/maintrick.github.io/" class="logo">MainTrick</a>
+                <nav>
+                    <ul>
+                        <li><a href="../artikel/">Artikel</a></li>
+                        <li><a href="../tutorial/">Tutorial</a></li>
+                        <li><a href="../game-aplikasi/">Game & Aplikasi</a></li>
+                        <li><a href="../berita/">Berita</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <article class="article-container">
+        <nav class="breadcrumb">
+            <a href="https://wahyustw.github.io/maintrick.github.io/">Beranda</a> › 
+            <a href="../${data.category}/">${data.category.charAt(0).toUpperCase() + data.category.slice(1)}</a> › 
+            ${data.title}
+        </nav>
+
+        <header class="article-header">
+            <h1 class="article-title">${data.title}</h1>
+            <div class="article-meta">
+                <span>👤 ${data.author}</span>
+                <span>📅 ${formattedDate}</span>
+                <span>📁 ${data.category.charAt(0).toUpperCase() + data.category.slice(1)}</span>
+            </div>
+            ${data.excerpt ? `<div style="background: #f8f9fa; padding: 1rem; border-left: 4px solid #667eea; font-style: italic; margin-top: 1rem;">${data.excerpt}</div>` : ''}
+        </header>
+
+        <div class="article-content">
+            ${data.content}
+        </div>
+    </article>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>MainTrick</h4>
+                    <p>Portal informasi terlengkap dengan artikel, tutorial, game & aplikasi, serta berita teknologi terupdate.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Kategori</h4>
+                    <ul>
+                        <li><a href="../artikel/">Artikel</a></li>
+                        <li><a href="../tutorial/">Tutorial</a></li>
+                        <li><a href="../game-aplikasi/">Game & Aplikasi</a></li>
+                        <li><a href="../berita/">Berita</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Halaman</h4>
+                    <ul>
+                        <li><a href="../tentang/">Tentang Kami</a></li>
+                        <li><a href="../kontak/">Kontak</a></li>
+                        <li><a href="../privacy/">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; ${new Date().getFullYear()} MainTrick. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "${data.title}",
+        "description": "${data.metaDescription}",
+        "datePublished": "${isoDate}",
+        "author": { "@type": "Person", "name": "${data.author}" },
+        "publisher": { "@type": "Organization", "name": "MainTrick" }
+    }
+    </script>
+</body>
+</html>`;
+        }
+
+        // Save as draft
+        function saveDraft() {
+            const data = collectArticleData();
+            localStorage.setItem('articleDraft', JSON.stringify(data));
+            showSuccessMessage('💾 Draft tersimpan!');
+        }
+
+        // Preview article
+        function previewArticle() {
+            const data = collectArticleData();
+            if (!data.title) {
+                alert('Mohon isi judul artikel terlebih dahulu!');
+                return;
+            }
+            
+            const html = generateArticleHTML(data);
+            const previewWindow = window.open('', '_blank');
+            previewWindow.document.write(html);
+            previewWindow.document.close();
+        }
+
+        // Publish article
+        function publishArticle() {
+            const data = collectArticleData();
+            
+            // Validation
+            if (!data.title) {
+                alert('Mohon isi judul artikel!');
+                return;
+            }
+            
+            if (!data.content || data.content.trim() === '<p><br></p>') {
+                alert('Mohon isi konten artikel!');
+                return;
+            }
+            
+            if (!data.metaDescription) {
+                alert('Mohon isi meta description untuk SEO!');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            
+            // Simulate publishing process
+            setTimeout(function() {
+                const html = generateArticleHTML(data);
+                
+                // Create downloadable file
+                const blob = new Blob([html], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${data.permalink || 'artikel'}.html`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                // Hide loading and show success
+                document.getElementById('loadingOverlay').style.display = 'none';
+                showSuccessMessage('🚀 Artikel berhasil dibuat! File telah didownload.');
+                
+                // Clear form if needed
+                if (confirm('Artikel telah dibuat. Apakah Anda ingin membersihkan form untuk artikel baru?')) {
+                    clearForm();
+                }
+            }, 2000);
+        }
+
+        // Show success message
+        function showSuccessMessage(message) {
+            const successMsg = document.getElementById('successMessage');
+            successMsg.textContent = message;
+            successMsg.style.display = 'block';
+            
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 3000);
+        }
+
+        // Clear form
+        function clearForm() {
+            document.getElementById('articleTitle').value = '';
+            document.getElementById('permalink').textContent = 'judul-artikel';
+            quill.setContents([]);
+            document.getElementById('metaDescription').value = '';
+            document.getElementById('articleExcerpt').value = '';
+            document.getElementById('seoKeywords').value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('imageAlt').value = '';
+            articleData.tags = [];
+            renderTags();
+            updateCharCount('metaDescription', 'metaDescCount', 160);
+            updateCharCount('articleExcerpt', 'excerptCount', 300);
+            updateReadingTime();
+        }
+
+        // Load draft on page load
+        window.addEventListener('load', function() {
+            const savedDraft = localStorage.getItem('articleDraft');
+            if (savedDraft) {
+                const data = JSON.parse(savedDraft);
+                
+                if (confirm('Ditemukan draft tersimpan. Apakah Anda ingin melanjutkan?')) {
+                    // Load draft data
+                    document.getElementById('articleTitle').value = data.title || '';
+                    document.getElementById('articleCategory').value = data.category || 'artikel';
+                    document.getElementById('metaDescription').value = data.metaDescription || '';
+                    document.getElementById('articleExcerpt').value = data.excerpt || '';
+                    document.getElementById('seoKeywords').value = data.keywords || '';
+                    document.getElementById('articleAuthor').value = data.author || 'MainTrick Team';
+                    document.getElementById('articleStatus').value = data.status || 'draft';
+                    document.getElementById('imageAlt').value = data.imageAlt || '';
+                    
+                    if (data.content) {
+                        quill.root.innerHTML = data.content;
+                    }
+                    
+                    if (data.tags) {
+                        articleData.tags = data.tags;
+                        renderTags();
+                    }
+                    
+                    if (data.featuredImage) {
+                        document.getElementById('imagePreview').src = data.featuredImage;
+                        document.getElementById('imagePreview').style.display = 'block';
+                    }
+                    
+                    updatePermalink();
+                    updateCharCount('metaDescription', 'metaDescCount', 160);
+                    updateCharCount('articleExcerpt', 'excerptCount', 300);
+                    updateReadingTime();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
