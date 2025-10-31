@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MainTrick - Portal informasi terlengkap seputar dunia internet, website, gaming, dan aplikasi terbaru. Tips, tutorial, dan review mendalam.">
+    <meta name="keywords" content="internet, website, gaming, aplikasi, tutorial, tips, review, teknologi">
+    <meta name="author" content="MainTrick">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="MainTrick - Portal Internet, Website, Gaming & App">
+    <meta property="og:description" content="Portal informasi terlengkap seputar dunia internet, website, gaming, dan aplikasi terbaru">
+    <meta property="og:image" content="https://wahyustw.github.io/maintrick.github.io/assets/og-image.jpg">
+    <meta property="og:url" content="https://wahyustw.github.io/maintrick.github.io/">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MainTrick - Portal Internet, Website, Gaming & App">
+    <meta name="twitter:description" content="Portal informasi terlengkap seputar dunia internet, website, gaming, dan aplikasi terbaru">
+    <meta name="twitter:image" content="https://wahyustw.github.io/maintrick.github.io/assets/twitter-image.jpg">
+    
+    <!-- Google Verification (Ganti dengan kode verifikasi Anda) -->
+    <meta name="google-site-verification" content="GANTI_DENGAN_KODE_VERIFIKASI_GOOGLE">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="canonical" href="https://wahyustw.github.io/maintrick.github.io/">
+    
+    <title>MainTrick - Portal Internet, Website, Gaming & App Terlengkap</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .logo:hover {
+            color: #e0e0e0;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        nav a:hover {
+            color: #e0e0e0;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: #ff6b6b;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+        }
+        
+        /* Main Content */
+        main {
+            padding: 4rem 0;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .category-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .category-card h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .category-card p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+        
+        .read-more {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        
+        .read-more:hover {
+            color: #764ba2;
+        }
+        
+        /* Latest Articles Section */
+        .latest-articles {
+            background: white;
+            padding: 3rem 0;
+            margin: 3rem 0;
+            border-radius: 10px;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+        
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .article-card {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .article-card:hover {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .article-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        .article-content {
+            padding: 1.5rem;
+        }
+        
+        .article-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        .article-excerpt {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        .article-meta {
+            font-size: 0.9rem;
+            color: #999;
+        }
+        
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-section ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-section ul li a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #555;
+            color: #ccc;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .hero {
+                padding: 2rem 0;
+            }
+            
+            .category-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">MainTrick</a>
+                <nav>
+                    <ul>
+                        <li><a href="/">Beranda</a></li>
+                        <li><a href="/internet/">Internet</a></li>
+                        <li><a href="/website/">Website</a></li>
+                        <li><a href="/gaming/">Gaming</a></li>
+                        <li><a href="/aplikasi/">Aplikasi</a></li>
+                        <li><a href="/tentang/">Tentang</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Selamat Datang di MainTrick</h1>
+            <p>Portal informasi terlengkap seputar dunia internet, website development, gaming terbaru, dan aplikasi mobile. Temukan tips, tutorial, dan review mendalam di sini!</p>
+            <a href="#content" class="cta-button">Mulai Eksplorasi</a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main id="content">
+        <div class="container">
+            <div class="content-grid">
+                <!-- Internet Category -->
+                <div class="category-card">
+                    <span class="category-icon">🌐</span>
+                    <h3>Internet & Teknologi</h3>
+                    <p>Pelajari tentang teknologi internet terbaru, tips keamanan online, dan tren digital yang sedang berkembang.</p>
+                    <a href="/internet/" class="read-more">Baca Selengkapnya →</a>
+                </div>
+
+                <!-- Website Category -->
+                <div class="category-card">
+                    <span class="category-icon">💻</span>
+                    <h3>Website Development</h3>
+                    <p>Tutorial pembuatan website, tips SEO, hosting, domain, dan panduan lengkap untuk developer pemula hingga expert.</p>
+                    <a href="/website/" class="read-more">Baca Selengkapnya →</a>
+                </div>
+
+                <!-- Gaming Category -->
+                <div class="category-card">
+                    <span class="category-icon">🎮</span>
+                    <h3>Gaming & Esports</h3>
+                    <p>Review game terbaru, tips gaming, hardware gaming, dan update terkini dari dunia esports internasional.</p>
+                    <a href="/gaming/" class="read-more">Baca Selengkapnya →</a>
+                </div>
+
+                <!-- Apps Category -->
+                <div class="category-card">
+                    <span class="category-icon">📱</span>
+                    <h3>Aplikasi Mobile</h3>
+                    <p>Rekomendasi aplikasi mobile terbaik, tutorial penggunaan, dan review mendalam aplikasi Android & iOS.</p>
+                    <a href="/aplikasi/" class="read-more">Baca Selengkapnya →</a>
+                </div>
+            </div>
+
+            <!-- Latest Articles Section -->
+            <section class="latest-articles">
+                <div class="container">
+                    <h2 class="section-title">Artikel Terbaru</h2>
+                    <div class="articles-grid">
+                        <!-- Article 1 -->
+                        <article class="article-card">
+                            <div class="article-image">🌐</div>
+                            <div class="article-content">
+                                <h3 class="article-title">Cara Optimasi Website untuk SEO 2024</h3>
+                                <p class="article-excerpt">Pelajari teknik SEO terbaru untuk meningkatkan ranking website Anda di search engine...</p>
+                                <div class="article-meta">Dipublikasikan: 31 Oktober 2024</div>
+                            </div>
+                        </article>
+
+                        <!-- Article 2 -->
+                        <article class="article-card">
+                            <div class="article-image">🎮</div>
+                            <div class="article-content">
+                                <h3 class="article-title">Review Game AAA Terbaru November 2024</h3>
+                                <p class="article-excerpt">Ulasan lengkap game-game blockbuster yang dirilis bulan ini, lengkap dengan rating...</p>
+                                <div class="article-meta">Dipublikasikan: 30 Oktober 2024</div>
+                            </div>
+                        </article>
+
+                        <!-- Article 3 -->
+                        <article class="article-card">
+                            <div class="article-image">📱</div>
+                            <div class="article-content">
+                                <h3 class="article-title">10 Aplikasi Produktivitas Terbaik 2024</h3>
+                                <p class="article-excerpt">Daftar aplikasi yang akan membantu meningkatkan produktivitas kerja dan belajar Anda...</p>
+                                <div class="article-meta">Dipublikasikan: 29 Oktober 2024</div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>MainTrick</h4>
+                    <p>Portal informasi terlengkap seputar dunia internet, website, gaming, dan aplikasi. Selalu update dengan konten berkualitas tinggi.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Kategori</h4>
+                    <ul>
+                        <li><a href="/internet/">Internet & Teknologi</a></li>
+                        <li><a href="/website/">Website Development</a></li>
+                        <li><a href="/gaming/">Gaming & Esports</a></li>
+                        <li><a href="/aplikasi/">Aplikasi Mobile</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Halaman</h4>
+                    <ul>
+                        <li><a href="/tentang/">Tentang Kami</a></li>
+                        <li><a href="/kontak/">Kontak</a></li>
+                        <li><a href="/privacy/">Privacy Policy</a></li>
+                        <li><a href="/sitemap.xml">Sitemap</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Ikuti Kami</h4>
+                    <ul>
+                        <li><a href="#" target="_blank">Facebook</a></li>
+                        <li><a href="#" target="_blank">Twitter</a></li>
+                        <li><a href="#" target="_blank">Instagram</a></li>
+                        <li><a href="#" target="_blank">YouTube</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 MainTrick. All rights reserved. | Powered by GitHub Pages</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "MainTrick",
+        "description": "Portal informasi terlengkap seputar dunia internet, website, gaming, dan aplikasi terbaru",
+        "url": "https://wahyustw.github.io/maintrick.github.io/",
+        "author": {
+            "@type": "Organization",
+            "name": "MainTrick"
+        },
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://wahyustw.github.io/maintrick.github.io/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+
+    <!-- Google Analytics (Ganti dengan kode tracking Anda) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_TRACKING_ID');
+    </script>
+</body>
+</html>
